@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift // Behavioral Operating System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons for clean minimal typography iconography -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Premium Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #1d1d1f;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Premium clean minimal scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f8f9fa;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e5ea;
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d1d1d6;
+        }
+
+        /* Premium Apple/Google Style Minimalist Cards */
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid #e5e5ea;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-card:hover {
+            border-color: #d1d1d6;
+            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.04);
+            transform: translateY(-1px);
+        }
+
+        /* Elegant Neutral Range Slider Accent Track Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #e5e5ea;
+            height: 4px;
+            border-radius: 999px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #0071e3;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: transform 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* Checkbox striking styles */
+        .custom-checkbox:checked + span {
+            color: #8e8e93;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen relative antialiased">
+
+    <!-- Global Premium Toast Notification Container -->
+    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full px-4 sm:px-0 pointer-events-none"></div>
+
+    <!-- Main Navigation Header -->
+    <header class="border-b border-[#e5e5ea] bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-8 w-8 rounded-lg bg-[#0071e3] flex items-center justify-center shadow-sm">
+                    <i data-lucide="compass" class="w-4 h-4 text-white"></i>
+                </div>
+                <span class="text-lg font-semibold tracking-tight text-[#1d1d1f]">Drift OS</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Status Sync Badge Layout -->
+                <div id="connection-status" class="flex items-center space-x-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full text-xs">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                        <span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    <span id="status-text" class="font-medium text-slate-700">Connecting...</span>
+                </div>
+
+                <button id="btn-manual-sync" class="p-2 text-slate-400 hover:text-slate-700 rounded-lg transition" title="Force Recalculation Check">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-grow flex flex-col relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==================== VIEW 1: PROFILE SETUP FORM ==================== -->
+        <div id="view-setup" class="w-full max-w-xl mx-auto hidden py-6">
+            <div class="premium-card rounded-2xl p-6 sm:p-8 space-y-6">
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Baseline Registration</h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Lock in your profile architecture below. Drift automatically sets up dynamic checklist systems matching your caliber.
+                    </p>
+                </div>
+
+                <form id="setup-form" class="space-y-5">
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Daily Routine</label>
+                        <textarea id="daily_routines" required rows="2" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
+                            placeholder="e.g., Wake up late, attend classes, code app ideas in evening, sleep at 2 AM."></textarea>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Long-Term Targets & Ambitions</label>
+                        <textarea id="goals_and_ambitions" required rows="2" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
+                            placeholder="e.g., Target top medical college selection while building scalable software models."></textarea>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Current Focus Bleeds & Leaks</label>
+                        <textarea id="distractions_and_leaks" required rows="2" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
+                            placeholder="e.g., Intense doomscrolling on forums when code bugs or assignments get tough."></textarea>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 space-y-4">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Initial Metric Sliders</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-600">Consistency Rating</span>
+                                    <span id="val-consistency" class="text-blue-600 font-bold">5/10</span>
+                                </div>
+                                <input type="range" id="consistency_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-consistency').innerText = this.value + '/10'">
+                            </div>
+
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-600">Resilience Index</span>
+                                    <span id="val-resilience" class="text-blue-600 font-bold">5/10</span>
+                                </div>
+                                <input type="range" id="resilience_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-resilience').innerText = this.value + '/10'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit-setup" class="w-full py-3.5 px-6 bg-[#0071e3] hover:bg-blue-600 text-white font-medium rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-sm text-sm">
+                        <span>Lock In Profile Parameters</span>
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 2: DRIFT MASTER DASHBOARD ==================== -->
+        <div id="view-dashboard" class="w-full space-y-6 hidden">
+            
+            <!-- Locked Profile Metadata Summary Banner -->
+            <div class="premium-card bg-slate-50 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-slate-600">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-blue-500"></i>
+                    <span><strong>Locked Coordinates Profile:</strong> Core system tracking active parameters.</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Operating Streak: 4 Days
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dashboard Split Column Framework Layout -->
+            <div class="lg:grid lg:grid-cols-12 lg:gap-6 space-y-6 lg:space-y-0">
+                
+                <!-- LEFT PANE: ANALYTICS INDEX CARD DECK (4 Cols) -->
+                <div class="lg:col-span-4 space-y-4">
+                    <!-- Growth Progress -->
+                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#1a73e8]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">System Momentum</span>
+                            <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i>
+                        </div>
+                        <div class="mt-4 flex items-baseline space-x-2">
+                            <span id="metric-consistency" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
+                            <span class="text-xs text-[#34a853] font-medium">Growth Velocity</span>
+                        </div>
+                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div id="metric-consistency-bar" class="bg-[#1a73e8] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Mindset Level -->
+                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#34a853]">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Opportunity Horizon</span>
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500"></i>
+                        </div>
+                        <div class="mt-4 flex items-baseline space-x-2">
+                            <span id="metric-mindset" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
+                            <span class="text-xs text-emerald-600 font-medium">Probability Index</span>
+                        </div>
+                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                            <div id="metric-mindset-bar" class="bg-[#34a853] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Radial Stress Ring Metric -->
+                    <div class="premium-card rounded-xl p-5 flex flex-col items-center text-center relative border-l-4 border-l-[#ea4335]">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider self-start">Friction Index</span>
+                        
+                        <div class="relative my-4 flex items-center justify-center">
+                            <svg class="w-24 h-24 transform -rotate-90">
+                                <circle cx="48" cy="48" r="40" stroke="#e5e5ea" stroke-width="5" fill="transparent"/>
+                                <circle id="stress-ring" cx="48" cy="48" r="40" stroke="#ea4335" stroke-width="5" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500"/>
+                            </svg>
+                            <div class="absolute flex flex-col items-center">
+                                <span id="metric-stress" class="text-2xl font-bold text-slate-900">--</span>
+                                <span class="text-[9px] text-slate-400 font-medium">Stress Tracker</span>
+                            </div>
+                        </div>
+                        <div id="stress-descriptor" class="text-xs font-medium text-slate-600">
+                            Stabilizing baseline...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT PANE: SYSTEM ACTION GUIDES MATRIX (8 Cols) -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="premium-card rounded-xl p-6 space-y-4">
+                        <div class="pb-3 border-b border-slate-100">
+                            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Active Operation Directives</h3>
+                            <p class="text-slate-500 text-xs mt-0.5">Check off items as completed to update your metrics ecosystem live.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Instant Matrix Column -->
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-2 text-blue-600 font-medium text-xs uppercase tracking-wider">
+                                    <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                    <span>Instant Corrections</span>
+                                </div>
+                                <div id="container-instant-corrections" class="space-y-2"></div>
+                            </div>
+
+                            <!-- Long Term Column -->
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-2 text-emerald-600 font-medium text-xs uppercase tracking-wider">
+                                    <i data-lucide="target" class="w-3.5 h-3.5"></i>
+                                    <span>Long-Term Tracking</span>
+                                </div>
+                                <div id="container-longterm-targets" class="space-y-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REALTIME RECALIBRATION INTERACTION DECK -->
+                    <div class="premium-card rounded-xl p-5 space-y-3 border-t-2 border-t-[#fbbc05]">
+                        <div class="flex items-start space-x-3">
+                            <div class="p-1.5 bg-amber-50 rounded-lg text-amber-600 border border-amber-200">
+                                <i data-lucide="sliders" class="w-4 h-4"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-semibold text-slate-900">Trajectory Realignment Console</h3>
+                                <p class="text-slate-500 text-xs">Targets unrealistic or schedule changed? Drop quick notes here to re-align coordinates.</p>
+                            </div>
+                        </div>
+
+                        <form id="recalibrate-form" class="space-y-3 pt-1">
+                            <textarea id="recalibrate_input" required rows="2"
+                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-blue-500 placeholder:text-slate-400"
+                                placeholder="e.g., Physics chapter is taking double the time. Tone down the immediate long-term coding speed target."></textarea>
+                            <div class="flex justify-end">
+                                <button type="submit" id="btn-recalibrate" class="w-full sm:w-auto px-5 py-2 bg-[#0071e3] hover:bg-blue-600 text-white font-medium text-xs rounded-lg transition flex items-center justify-center space-x-1.5 shadow-sm">
+                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                    <span>Recalibrate Operating Framework</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#e5e5ea] bg-white py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
+            &copy; 2026 Drift Operating System. Relational Database Verification Active.
+        </div>
+    </footer>
+
+    <!-- INTERACTION LOGIC WORKSPACE -->
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
+        let isDemoMode = false;
+
+        // Fallback robust sandbox mock database structure
+        const mockDatabase = {
+            metrics: { live_growth_velocity: 60.0, live_opportunity_probability: 75.0, live_stress_level: 4.0 },
+            targets: [
+                { id: 101, target_type: "instant", description: "Clear current visual desktop clutter to restore sensory focus", is_completed: 0 },
+                { id: 102, target_type: "instant", description: "Execute immediate 10-minute structural calendar block window", is_completed: 0 },
+                { id: 103, target_type: "long_term", description: "Enforce locked 11:30 PM absolute sleep preparation protocol", is_completed: 0 }
+            ]
+        };
+
+        function showNotification(title, text, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let icon = 'info', iconColor = 'text-blue-500', bg = 'bg-white', border = 'border-slate-200';
+            
+            if (type === 'success') { icon = 'check-circle'; iconColor = 'text-emerald-500'; }
+            else if (type === 'error') { icon = 'alert-triangle'; iconColor = 'text-rose-500'; }
+
+            toast.className = `premium-card pointer-events-auto rounded-xl p-4 border ${border} ${bg} flex items-start space-x-3 transition-all duration-300 translate-x-12 opacity-0`;
+            toast.innerHTML = `
+                <div class="${iconColor} mt-0.5"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
+                <div class="flex-grow space-y-0.5">
+                    <h5 class="text-xs font-bold uppercase tracking-wider text-slate-900">${title}</h5>
+                    <p class="text-xs text-slate-500 leading-normal">${text}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 50);
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4500);
+        }
+
+        function updateConnectionBadge(connected) {
+            const dot = document.getElementById('status-dot');
+            const txt = document.getElementById('status-text');
+            const badge = document.getElementById('connection-status');
+            if (connected) {
+                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500';
+                txt.innerText = 'Connected Engine';
+                badge.className = 'flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs text-emerald-800';
+            } else {
+                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-amber-500';
+                txt.innerText = 'Server Offline - Demo Code Active';
+                badge.className = 'flex items-center space-x-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-xs text-amber-800';
+            }
+        }
+
+        function switchView(targetView) {
+            if (targetView === 'setup') {
+                document.getElementById('view-dashboard').classList.add('hidden');
+                document.getElementById('view-setup').classList.remove('hidden');
+            } else {
+                document.getElementById('view-setup').classList.add('hidden');
+                document.getElementById('view-dashboard').classList.remove('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        function sendToRecalibrateBox(text) {
+            const inputField = document.getElementById('recalibrate_input');
+            inputField.value = `Target issue adjustment: "${text}". Please recalibrate this task criteria.`;
+            inputField.focus();
+            showNotification("Copied to Console", "Target copied below. Add comments and click Recalibrate.", "success");
+        }
+
+        function renderChecklist(targets) {
+            const instantBox = document.getElementById('container-instant-corrections');
+            const longTermBox = document.getElementById('container-longterm-targets');
+            let ic = 0, lt = 0;
+            
+            instantBox.innerHTML = '';
+            longTermBox.innerHTML = '';
+
+            targets.forEach(t => {
+                const isInstant = t.target_type === 'instant';
+                const container = isInstant ? instantBox : longTermBox;
+                const row = document.createElement('div');
+                
+                row.className = 'flex items-start justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition group';
+                row.innerHTML = `
+                    <label class="flex items-start space-x-3 flex-grow cursor-pointer select-none">
+                        <input type="checkbox" data-id="${t.id}" ${t.is_completed ? 'checked' : ''} 
+                            class="target-toggle mt-0.5 w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 transition">
+                        <span class="text-xs text-slate-700 font-light leading-relaxed ${t.is_completed ? 'line-through text-slate-400' : ''}">
+                            ${t.description}
+                        </span>
+                    </label>
+                    <button class="text-[10px] text-slate-400 hover:text-amber-600 font-medium tracking-tight ml-2 opacity-0 group-hover:opacity-100 transition-all" onclick="sendToRecalibrateBox('${t.description}')">
+                        Too Hard?
+                    </button>
+                `;
+
+                row.querySelector('input').addEventListener('change', (e) => toggleTarget(t.id, e.target.checked));
+                container.appendChild(row);
+                if (isInstant) ic++; else lt++;
+            });
+
+            if (ic === 0) instantBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">No active instant guides left.</div>';
+            if (lt === 0) longTermBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">Long-term alignment optimized.</div>';
+            document.getElementById('active-targets-count').innerText = `${ic + lt} Directives Active`;
+        }
+
+        function populateDashboard(data) {
+            const v = parseFloat(data.metrics?.live_growth_velocity || data.metrics?.live_growth_velocity === 0 ? data.metrics.live_growth_velocity : 50);
+            const o = parseFloat(data.metrics?.live_opportunity_probability || data.metrics?.live_opportunity_probability === 0 ? data.metrics.live_opportunity_probability : 50);
+            const s = parseFloat(data.metrics?.live_stress_level || 4);
+
+            document.getElementById('metric-consistency').innerText = v.toFixed(1) + '%';
+            document.getElementById('metric-consistency-bar').style.width = `${v}%`;
+            document.getElementById('metric-mindset').innerText = o.toFixed(1) + '%';
+            document.getElementById('metric-mindset-bar').style.width = `${o}%`;
+
+            document.getElementById('metric-stress').innerText = s.toFixed(1);
+            document.getElementById('stress-ring').style.strokeDashoffset = 251.2 - (s / 10) * 251.2;
+            
+            const desc = document.getElementById('stress-descriptor');
+            if (s <= 3.5) { desc.innerText = 'Optimal Flow Balance'; desc.className = 'text-xs font-semibold text-emerald-600'; }
+            else if (s <= 6.5) { desc.innerText = 'Moderate Mental Load'; desc.className = 'text-xs font-semibold text-blue-600'; }
+            else { desc.innerText = 'High Strain Warning'; desc.className = 'text-xs font-semibold text-rose-600'; }
+
+            renderChecklist(data.targets || []);
+        }
+
+        async function fetchDashboardState() {
+            try {
+                const r = await fetch(`${API_BASE_URL}/dashboard`);
+                if (r.status === 200) {
+                    const d = await r.json();
+                    isDemoMode = false;
+                    updateConnectionBadge(true);
+                    populateDashboard(d);
+                    switchView('dashboard');
+                } else {
+                    isDemoMode = false;
+                    updateConnectionBadge(true);
+                    switchView('setup');
+                }
+            } catch (e) {
+                isDemoMode = true;
+                updateConnectionBadge(false);
+                switchView(mockDatabase.profile ? 'dashboard' : 'setup');
+                if (mockDatabase.profile) populateDashboard(mockDatabase);
+            }
+        }
+
+        async function toggleTarget(id, checked) {
+            try {
+                if (isDemoMode) {
+                    const t = mockDatabase.targets.find(item => item.id === id);
+                    if (t) t.is_completed = checked ? 1 : 0;
+                    populateDashboard(mockDatabase);
+                    showNotification("State Changed", "Ecosystem metrics dynamically computed inside demo layer.", "success");
+                } else {
+                    const r = await fetch(`${API_BASE_URL}/targets/${id}/toggle`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ is_completed: checked })
+                    });
+                    if (!r.ok) throw new Error();
+                    showNotification("Sync Successful", "Ecosystem checklist and metrics aligned dynamically.", "success");
+                    await fetchDashboardState();
+                }
+            } catch (err) {
+                showNotification("Sync Failed", "Error linking target execution coordinates.", "error");
+                await fetchDashboardState();
+            }
+        }
+
+        document.getElementById('setup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                daily_routines: document.getElementById('daily_routines').value,
+                goals_and_ambitions: document.getElementById('goals_and_ambitions').value,
+                distractions_and_leaks: document.getElementById('distractions_and_leaks').value,
+                initial_consistency: parseInt(document.getElementById('consistency_level').value),
+                initial_resilience: parseInt(document.getElementById('resilience_level').value)
+            };
+
+            const btn = document.getElementById('btn-submit-setup');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Locking Coordinates...';
+
+            try {
+                if (isDemoMode) {
+                    await new Promise(res => setTimeout(res, 800));
+                    mockDatabase.profile = payload;
+                    populateDashboard(mockDatabase);
+                    switchView('dashboard');
+                } else {
+                    const r = await fetch(`${API_BASE_URL}/profile/setup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!r.ok) throw new Error();
+                    await fetchDashboardState();
+                }
+                showNotification("Profile Configured", "Your parameters are verified and locked.", "success");
+            } catch (err) {
+                showNotification("Error", "Registration payload rejected. Check backend terminal.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        });
+
+        document.getElementById('recalibrate-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = document.getElementById('recalibrate_input').value;
+            const btn = document.getElementById('btn-recalibrate');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = 'Recalibrating Tracks...';
+
+            try {
+                if (isDemoMode) {
+                    await new Promise(res => setTimeout(res, 1000));
+                    mockDatabase.targets.push({
+                        id: Date.now(),
+                        target_type: "instant",
+                        description: `Calibrated micro-task: Focus processing loop adjustment for prompt`,
+                        is_completed: 0
+                    });
+                    populateDashboard(mockDatabase);
+                } else {
+                    const r = await fetch(`${API_BASE_URL}/profile/recalibrate`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ input: text })
+                    });
+                    if (!r.ok) throw new Error();
+                    await fetchDashboardState();
+                }
+                document.getElementById('recalibrate_input').value = '';
+                showNotification("Ecosystem Adjusted", "AI engine re-allocated micro-steps efficiently.", "success");
+            } catch (err) {
+                showNotification("Error", "Recalibration routine pipeline rejected.", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        });
+
+        document.getElementById('btn-manual-sync').addEventListener('click', () => {
+            showNotification("Querying Engine", "Verifying active state rows...", "info");
+            fetchDashboardState();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            fetchDashboardState();
+        });
+    </script>
+</body>
+</html>
