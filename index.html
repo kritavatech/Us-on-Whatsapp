@@ -1,585 +1,1181 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift // Behavioral Operating System</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons for clean minimal typography iconography -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Premium Google Font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>KritaVa Core | Stay Ahead of the Chaos</title>
     
+    <!-- Favicon & Manifest Requirements -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
+    <link rel="manifest" href="site.webmanifest"/>
+
+    <!-- Tailwind CSS and Font Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg1: '#050505',
+                            bg2: '#0B0B0B',
+                            glass: 'rgba(255,255,255,0.03)',
+                            glassHover: 'rgba(255,255,255,0.06)',
+                            border: 'rgba(255,255,255,0.08)',
+                            text1: '#F5F5F5',
+                            text2: '#A1A1AA',
+                            accent1: '#4FA3A5',
+                            accent2: '#7BC9C5',
+                            card: 'rgba(255,255,255,0.02)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                        'float': 'float 5s ease-in-out infinite',
+                        'slow-spin': 'spin-slow 25s linear infinite',
+                        'pulse-subtle': 'pulse-subtle 8s ease-in-out infinite',
+                        'bounce-spring': 'bounce-spring 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite',
+                        'fade-in-up': 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 10px rgba(79,163,165,0.1)' },
+                            '100%': { boxShadow: '0 0 25px rgba(79,163,165,0.35)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' }
+                        },
+                        'spin-slow': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        },
+                        'pulse-subtle': {
+                            '0%, 100%': { opacity: '0.25', transform: 'scale(1)' },
+                            '50%': { opacity: '0.45', transform: 'scale(1.04)' }
+                        },
+                        'bounce-spring': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-4px)' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(16px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #1d1d1f;
+            background-color: #050505;
+            color: #F5F5F5;
             overflow-x: hidden;
-            width: 100%;
         }
-
-        /* Premium clean minimal scrollbar styling */
+        
+        /* Premium Scrollbar styling matching brand color guidelines */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f8f9fa;
+            background: #050505; 
         }
         ::-webkit-scrollbar-thumb {
-            background: #e5e5ea;
-            border-radius: 999px;
+            background: rgba(255,255,255,0.08); 
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #d1d1d6;
+            background: rgba(79,163,165,0.4); 
         }
 
-        /* Premium Apple/Google Style Minimalist Cards */
-        .premium-card {
-            background: #ffffff;
-            border: 1px solid #e5e5ea;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+        .glass-panel {
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 16px;
+        }
+
+        .glass-nav {
+            background: rgba(5,5,5,0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 25px rgba(79,163,165,0.2);
+            border-color: rgba(79,163,165,0.4);
+        }
+
+        /* Fullscreen background grid layout configuration */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.45;
+            pointer-events: none;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #F5F5F5 30%, #7BC9C5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glassmorphic input field configurations with transitions */
+        .glass-input {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #F5F5F5;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .premium-card:hover {
-            border-color: #d1d1d6;
-            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.04);
-            transform: translateY(-1px);
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(79,163,165,0.6);
+            box-shadow: 0 0 15px rgba(79,163,165,0.15);
+            outline: none;
         }
 
-        /* Elegant Neutral Range Slider Accent Track Styling */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-        }
-        input[type="range"]::-webkit-slider-runnable-track {
-            background: #e5e5ea;
-            height: 4px;
-            border-radius: 999px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            margin-top: -6px;
-            background-color: #0071e3;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-            transition: transform 0.1s ease;
-        }
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
+        /* Custom Dropdown Animations and Transitions */
+        .custom-dropdown-panel {
+            max-height: 250px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
         }
 
-        /* Checkbox striking styles */
-        .custom-checkbox:checked + span {
-            color: #8e8e93;
-            text-decoration: line-through;
+        .benefit-bullet:hover {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(79,163,165, 0.3);
+            transform: translateX(4px);
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen relative antialiased">
+<body class="antialiased font-sans selection:bg-brand-accent1 selection:text-white">
 
-    <!-- Global Premium Toast Notification Container -->
-    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full px-4 sm:px-0 pointer-events-none"></div>
+    <!-- System Level Activity Toast Notification -->
+    <div id="toast" class="fixed top-24 right-5 md:right-10 glass-panel px-6 py-4 transform translate-x-[150%] transition-transform duration-500 z-50 flex items-center gap-3 shadow-2xl">
+        <i id="toast-icon" class="fas fa-check-circle text-brand-accent1 text-xl animate-pulse"></i>
+        <div class="flex flex-col">
+            <span id="toast-title" class="text-xs text-brand-text2 uppercase tracking-widest font-semibold">System Node</span>
+            <span id="toast-msg" class="text-sm font-medium text-white">Message Information</span>
+        </div>
+    </div>
 
-    <!-- Main Navigation Header -->
-    <header class="border-b border-[#e5e5ea] bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="h-8 w-8 rounded-lg bg-[#0071e3] flex items-center justify-center shadow-sm">
-                    <i data-lucide="compass" class="w-4 h-4 text-white"></i>
+    <!-- Navigation Bar (Dynamic Fluid Scroll Configured) -->
+    <nav id="navbar" style="width: 90%;" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 glass-panel rounded-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] border border-white/10 bg-white/5 backdrop-blur-xl">
+        <div class="max-w-5xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <!-- Branding Container with Exact Custom Logo Replacement -->
+                <div class="relative w-8 h-8 rounded-full shadow-[0_0_12px_rgba(79,163,165,0.4)] group-hover:scale-110 transition-transform duration-500 overflow-hidden bg-brand-bg2 border border-white/10 flex items-center justify-center">
+                    <img src="ChatGPT Image May 15, 2026, 07_04_43 PM.png" alt="KritaVa" class="w-full h-full object-cover z-10" onerror="this.src='https://placehold.co/100/4fa3a5/ffffff?text=K'">
                 </div>
-                <span class="text-lg font-semibold tracking-tight text-[#1d1d1f]">Drift OS</span>
+                <span class="font-display font-bold text-lg md:text-xl tracking-wide group-hover:text-brand-accent1 transition-colors duration-300">KritaVa <span class="text-[10px] font-mono font-medium tracking-normal text-brand-accent1 px-1.5 py-0.5 rounded border border-brand-accent1/20 bg-brand-accent1/5 ml-1 animate-bounce-spring">CORE</span></span>
             </div>
             
-            <div class="flex items-center space-x-4">
-                <!-- Status Sync Badge Layout -->
-                <div id="connection-status" class="flex items-center space-x-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full text-xs">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                        <span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                    </span>
-                    <span id="status-text" class="font-medium text-slate-700">Connecting...</span>
-                </div>
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-brand-text2">
+                <a href="#benefits" class="relative hover:text-white hover:-translate-y-0.5 transition-all duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-brand-accent1 hover:after:w-full after:transition-all after:duration-300" data-i18n="nav_benefits">Benefits</a>
+                <a href="#about-us" class="relative hover:text-white hover:-translate-y-0.5 transition-all duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-brand-accent1 hover:after:w-full after:transition-all after:duration-300" data-i18n="nav_about_us">Ecosystem</a>
+                <a href="#join-node" class="relative hover:text-white hover:-translate-y-0.5 transition-all duration-300 after:content-[''] after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-brand-accent1 hover:after:w-full after:transition-all after:duration-300" data-i18n="nav_join">Join Hub</a>
+            </div>
 
-                <button id="btn-manual-sync" class="p-2 text-slate-400 hover:text-slate-700 rounded-lg transition" title="Force Recalculation Check">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <div class="flex items-center gap-2 md:gap-4">
+                <!-- Language Selector -->
+                <div class="relative" id="lang-selector-container">
+                    <button id="lang-btn" class="flex items-center gap-1.5 md:gap-2 glass-panel px-2.5 md:px-3 py-1.5 text-[10px] md:text-xs font-medium hover:bg-white/10 hover:border-brand-accent1/50 hover:shadow-[0_0_10px_rgba(79,163,165,0.2)] transition-all duration-300">
+                        <i class="fas fa-globe text-brand-accent1"></i>
+                        <span id="current-lang">English</span>
+                        <i class="fas fa-chevron-down text-[8px] md:text-[10px] transition-transform duration-300" id="lang-chevron"></i>
+                    </button>
+                    <div id="lang-dropdown" class="absolute right-0 mt-3 w-36 bg-black/95 border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] rounded-xl opacity-0 pointer-events-none transition-all duration-300 transform origin-top translate-y-2 overflow-hidden z-[9999]" style="backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+                        <div class="flex flex-col py-1" id="lang-options">
+                            <!-- Populated programmatically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-brand-text2 hover:text-white p-2 glass-panel flex items-center justify-center w-8 h-8 rounded-full border-white/5">
+                    <i class="fas fa-bars text-sm"></i>
                 </button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- MAIN WORKSPACE -->
-    <main class="flex-grow flex flex-col relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Mobile Responsive Drawer Menu -->
+    <div id="mobile-drawer" class="fixed inset-0 bg-black/98 backdrop-blur-xl z-40 transform translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hidden flex flex-col justify-center items-center space-y-8 text-2xl font-display font-medium">
+        <button id="mobile-close-btn" class="absolute top-8 right-8 text-brand-text2 hover:text-white p-2">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        <a href="#benefits" class="text-brand-text2 hover:text-white transition-colors" onclick="toggleMobileMenu()" data-i18n="nav_benefits">Benefits</a>
+        <a href="#about-us" class="text-brand-text2 hover:text-white transition-colors" onclick="toggleMobileMenu()" data-i18n="nav_about_us">Ecosystem</a>
+        <a href="#join-node" class="text-brand-text2/90 text-brand-accent1 hover:text-white transition-colors" onclick="toggleMobileMenu()" data-i18n="nav_join">Join Hub</a>
+    </div>
 
-        <!-- ==================== VIEW 1: PROFILE SETUP FORM ==================== -->
-        <div id="view-setup" class="w-full max-w-xl mx-auto hidden py-6">
-            <div class="premium-card rounded-2xl p-6 sm:p-8 space-y-6">
-                <div class="space-y-2">
-                    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Baseline Registration</h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Lock in your profile architecture below. Drift automatically sets up dynamic checklist systems matching your caliber.
-                    </p>
-                </div>
-
-                <form id="setup-form" class="space-y-5">
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Daily Routine</label>
-                        <textarea id="daily_routines" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Wake up late, attend classes, code app ideas in evening, sleep at 2 AM."></textarea>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Long-Term Targets & Ambitions</label>
-                        <textarea id="goals_and_ambitions" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Target top medical college selection while building scalable software models."></textarea>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Current Focus Bleeds & Leaks</label>
-                        <textarea id="distractions_and_leaks" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Intense doomscrolling on forums when code bugs or assignments get tough."></textarea>
-                    </div>
-
-                    <div class="pt-2 border-t border-slate-100 space-y-4">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Initial Metric Sliders</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-600">Consistency Rating</span>
-                                    <span id="val-consistency" class="text-blue-600 font-bold">5/10</span>
-                                </div>
-                                <input type="range" id="consistency_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-consistency').innerText = this.value + '/10'">
-                            </div>
-
-                            <div class="space-y-1">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-600">Resilience Index</span>
-                                    <span id="val-resilience" class="text-blue-600 font-bold">5/10</span>
-                                </div>
-                                <input type="range" id="resilience_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-resilience').innerText = this.value + '/10'">
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="btn-submit-setup" class="w-full py-3.5 px-6 bg-[#0071e3] hover:bg-blue-600 text-white font-medium rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-sm text-sm">
-                        <span>Lock In Profile Parameters</span>
-                        <i data-lucide="lock" class="w-4 h-4"></i>
-                    </button>
-                </form>
+    <!-- Hero Matrix Section (Above the Fold Dual Columns) -->
+    <section class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-28 pb-12 px-4 md:px-8">
+        
+        <!-- Interactive Constellation Grid Canvas -->
+        <canvas id="canvas-container"></canvas>
+        
+        <!-- Rotating Core Asset Sphere -->
+        <div class="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] md:w-[600px] md:h-[600px] pointer-events-none select-none z-0">
+            <div class="w-full h-full animate-pulse-subtle bg-[radial-gradient(circle_at_center,_rgba(79,163,165,0.12)_0%,_transparent_65%)] rounded-full flex items-center justify-center">
+                <img src="image_38463c.png" alt="" onerror="this.style.display='none'" class="w-full h-full object-contain animate-slow-spin opacity-35 filter blur-[1px]">
             </div>
         </div>
 
-        <!-- ==================== VIEW 2: DRIFT MASTER DASHBOARD ==================== -->
-        <div id="view-dashboard" class="w-full space-y-6 hidden">
+        <div class="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mt-6">
             
-            <!-- Locked Profile Metadata Summary Banner -->
-            <div class="premium-card bg-slate-50 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-slate-600">
-                <div class="flex items-center space-x-2">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-blue-500"></i>
-                    <span><strong>Locked Coordinates Profile:</strong> Core system tracking active parameters.</span>
+            <!-- COLUMN 1: Value Core, Bullet points, Badge and About Portal (Lg: 7 Columns) -->
+            <div class="lg:col-span-7 flex flex-col justify-center text-left reveal space-y-6" id="benefits">
+                <!-- Curated Floating Badge -->
+                <div class="flex">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-panel border-brand-accent1/30 text-brand-accent1 text-[11px] tracking-wider uppercase font-semibold animate-float">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent1 animate-ping"></span>
+                        <span data-i18n="hero_badge">KritaVa Intel Core Node</span>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Operating Streak: 4 Days
-                    </span>
-                </div>
-            </div>
 
-            <!-- Dashboard Split Column Framework Layout -->
-            <div class="lg:grid lg:grid-cols-12 lg:gap-6 space-y-6 lg:space-y-0">
-                
-                <!-- LEFT PANE: ANALYTICS INDEX CARD DECK (4 Cols) -->
-                <div class="lg:col-span-4 space-y-4">
-                    <!-- Growth Progress -->
-                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#1a73e8]">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">System Momentum</span>
-                            <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i>
-                        </div>
-                        <div class="mt-4 flex items-baseline space-x-2">
-                            <span id="metric-consistency" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
-                            <span class="text-xs text-[#34a853] font-medium">Growth Velocity</span>
-                        </div>
-                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div id="metric-consistency-bar" class="bg-[#1a73e8] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-display font-bold leading-tight" data-i18n="hero_headline">
+                    To stay ahead <br/>of the <span class="gradient-text">digital chaos.</span>
+                </h1>
+                <p class="text-sm md:text-base text-brand-text2 max-w-2xl font-light leading-relaxed" data-i18n="hero_subhead">
+                    We've established an exclusive, high-signal WhatsApp community circle around KritaVa. Get pure intelligence, architectural tools, and system strategies sent straight to your feed.
+                </p>
+
+                <!-- Value Proposition Highlights with Tactile Animations -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-boxes-stacked"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_1_title">Product Updates</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_1_short">Direct alpha previews and engineering logs.</p>
                         </div>
                     </div>
-
-                    <!-- Mindset Level -->
-                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#34a853]">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Opportunity Horizon</span>
-                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500"></i>
-                        </div>
-                        <div class="mt-4 flex items-baseline space-x-2">
-                            <span id="metric-mindset" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
-                            <span class="text-xs text-emerald-600 font-medium">Probability Index</span>
-                        </div>
-                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div id="metric-mindset-bar" class="bg-[#34a853] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-brain"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_2_title">AI Breakthroughs</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_2_short">State-of-the-art cognitive frameworks.</p>
                         </div>
                     </div>
-
-                    <!-- Radial Stress Ring Metric -->
-                    <div class="premium-card rounded-xl p-5 flex flex-col items-center text-center relative border-l-4 border-l-[#ea4335]">
-                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider self-start">Friction Index</span>
-                        
-                        <div class="relative my-4 flex items-center justify-center">
-                            <svg class="w-24 h-24 transform -rotate-90">
-                                <circle cx="48" cy="48" r="40" stroke="#e5e5ea" stroke-width="5" fill="transparent"/>
-                                <circle id="stress-ring" cx="48" cy="48" r="40" stroke="#ea4335" stroke-width="5" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500"/>
-                            </svg>
-                            <div class="absolute flex flex-col items-center">
-                                <span id="metric-stress" class="text-2xl font-bold text-slate-900">--</span>
-                                <span class="text-[9px] text-slate-400 font-medium">Stress Tracker</span>
-                            </div>
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-microchip"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_3_title">Model Releases</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_3_short">API tools, automations, & deployment blueprints.</p>
                         </div>
-                        <div id="stress-descriptor" class="text-xs font-medium text-slate-600">
-                            Stabilizing baseline...
+                    </div>
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-screwdriver-wrench"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_4_title">Tools & Workflows</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_4_short">Optimized developer setups and automation paths.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-network-wired"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_5_title">Future Tech Discussion</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_5_short">Quantum frameworks and physical tech automations.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-bullet border border-white/5 rounded-xl p-4 transition-all duration-300 flex items-start gap-3">
+                        <div class="text-brand-accent1 text-sm mt-0.5"><i class="fas fa-cubes"></i></div>
+                        <div>
+                            <h4 class="text-xs uppercase tracking-wider text-white font-semibold" data-i18n="benefit_6_title">Startup & Building Insights</h4>
+                            <p class="text-xs text-brand-text2 mt-1" data-i18n="benefit_6_short">Database strategies and bootlegged operations.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT PANE: SYSTEM ACTION GUIDES MATRIX (8 Cols) -->
-                <div class="lg:col-span-8 space-y-6">
-                    <div class="premium-card rounded-xl p-6 space-y-4">
-                        <div class="pb-3 border-b border-slate-100">
-                            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Active Operation Directives</h3>
-                            <p class="text-slate-500 text-xs mt-0.5">Check off items as completed to update your metrics ecosystem live.</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Instant Matrix Column -->
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-2 text-blue-600 font-medium text-xs uppercase tracking-wider">
-                                    <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                                    <span>Instant Corrections</span>
-                                </div>
-                                <div id="container-instant-corrections" class="space-y-2"></div>
-                            </div>
-
-                            <!-- Long Term Column -->
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-2 text-emerald-600 font-medium text-xs uppercase tracking-wider">
-                                    <i data-lucide="target" class="w-3.5 h-3.5"></i>
-                                    <span>Long-Term Tracking</span>
-                                </div>
-                                <div id="container-longterm-targets" class="space-y-2"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- REALTIME RECALIBRATION INTERACTION DECK -->
-                    <div class="premium-card rounded-xl p-5 space-y-3 border-t-2 border-t-[#fbbc05]">
-                        <div class="flex items-start space-x-3">
-                            <div class="p-1.5 bg-amber-50 rounded-lg text-amber-600 border border-amber-200">
-                                <i data-lucide="sliders" class="w-4 h-4"></i>
+                <!-- Apple-inspired Spotlight Discover Card linking to critical ecosystem URL -->
+                <div id="about-us" class="glass-panel p-5 border border-white/[0.08] hover-glow transition-all duration-300 mt-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full overflow-hidden border border-white/10 flex-shrink-0 flex items-center justify-center bg-black">
+                                <img src="ChatGPT Image May 15, 2026, 07_04_43 PM.png" alt="Logo" class="w-full h-full object-cover">
                             </div>
                             <div>
-                                <h3 class="text-sm font-semibold text-slate-900">Trajectory Realignment Console</h3>
-                                <p class="text-slate-500 text-xs">Targets unrealistic or schedule changed? Drop quick notes here to re-align coordinates.</p>
+                                <h4 class="text-sm font-semibold text-white" data-i18n="about_tag">Ecosystem Architecture</h4>
+                                <p class="text-xs text-brand-text2 font-light" data-i18n="about_card_desc">We design foundational logic systems, digital ecosystems, and robust infrastructures.</p>
+                            </div>
+                        </div>
+                        <a href="https://kritavatech.github.io/-/" target="_blank" class="px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-accent1/50 text-xs text-white font-medium transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(79,163,165,0.15)] whitespace-nowrap">
+                            <span data-i18n="about_card_btn">Discover KritaVa</span>
+                            <i class="fas fa-arrow-up-right-from-square text-[10px] text-brand-accent1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Access Form Card (Lg: 5 Columns) -->
+            <div id="join-node" class="lg:col-span-5 w-full reveal delay-100">
+                <div class="glass-panel p-6 md:p-8 relative overflow-hidden border border-white/10">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-accent1/2 via-transparent to-transparent opacity-40 pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between mb-4 relative z-10">
+                        <div class="flex flex-col">
+                            <h3 class="text-xl font-display font-bold text-white" data-i18n="form_title">Request Access</h3>
+                            <p class="text-xs text-brand-text2 mt-0.5" data-i18n="form_subtitle">Submit coordinates to secure official community connection.</p>
+                        </div>
+                        <div class="text-brand-accent2 text-2xl animate-pulse">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                    </div>
+
+                    <form id="community-form" class="relative z-10 space-y-4" onsubmit="handleFormSubmission(event)">
+                        
+                        <!-- Form Field: Full Name -->
+                        <div class="space-y-1">
+                            <label for="user-name" class="block text-[10px] font-semibold text-brand-text2 uppercase tracking-wider" data-i18n="label_name">Full Name</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-text2/60 text-xs">
+                                    <i class="fas fa-user-astronaut"></i>
+                                </span>
+                                <input type="text" id="user-name" required class="w-full glass-input rounded-xl py-2.5 pl-9 pr-3 text-sm" placeholder="e.g. Liam Foster" data-i18n-placeholder="placeholder_name">
+                            </div>
+                            <span id="err-name" class="text-[10px] text-red-400 hidden flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle"></i> <span data-i18n="err_name_msg">Please enter your full name.</span>
+                            </span>
+                        </div>
+
+                        <!-- Form Field: Phone Number with Flag Country Code Selector -->
+                        <div class="space-y-1">
+                            <label for="user-phone" class="block text-[10px] font-semibold text-brand-text2 uppercase tracking-wider" data-i18n="label_phone">Phone Number</label>
+                            <div class="flex gap-2">
+                                <!-- Dynamic Dial Code Dropdown Panel -->
+                                <div class="relative w-24 flex-shrink-0" id="dial-selector-container">
+                                    <div id="dial-trigger" class="flex items-center justify-between w-full glass-input rounded-xl py-2.5 px-3 text-xs cursor-pointer" onclick="toggleDialDropdown()">
+                                        <span id="selected-flag">🇮🇳 +91</span>
+                                        <i class="fas fa-chevron-down text-[8px] text-brand-text2"></i>
+                                    </div>
+                                    <div id="dial-options" class="absolute left-0 right-0 mt-1.5 bg-[#09090A] border border-white/15 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-200 transform translate-y-1 z-50 custom-dropdown-panel text-xs">
+                                        <div class="px-2 py-1.5 hover:bg-white/5 cursor-pointer" onclick="selectDial('🇮🇳 +91')">🇮🇳 +91</div>
+                                        <div class="px-2 py-1.5 hover:bg-white/5 cursor-pointer" onclick="selectDial('🇺🇸 +1')">🇺🇸 +1</div>
+                                        <div class="px-2 py-1.5 hover:bg-white/5 cursor-pointer" onclick="selectDial('🇬🇧 +44')">🇬🇧 +44</div>
+                                        <div class="px-2 py-1.5 hover:bg-white/5 cursor-pointer" onclick="selectDial('🇸🇬 +65')">🇸🇬 +65</div>
+                                    </div>
+                                </div>
+                                <div class="relative flex-grow">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-brand-text2/60 text-xs">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </span>
+                                    <input type="tel" id="user-phone" required class="w-full glass-input rounded-xl py-2.5 pl-8 pr-3 text-sm" placeholder="10-digit number" data-i18n-placeholder="placeholder_phone">
+                                </div>
+                            </div>
+                            <span id="err-phone" class="text-[10px] text-red-400 hidden flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle"></i> <span data-i18n="err_phone_msg">Provide a valid contact code sequence.</span>
+                            </span>
+                        </div>
+
+                        <!-- Form Field: Email Address -->
+                        <div class="space-y-1">
+                            <label for="user-email" class="block text-[10px] font-semibold text-brand-text2 uppercase tracking-wider" data-i18n="label_email">Email Address</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-text2/60 text-xs">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" id="user-email" required class="w-full glass-input rounded-xl py-2.5 pl-9 pr-3 text-sm" placeholder="you@example.com" data-i18n-placeholder="placeholder_email">
+                            </div>
+                            <span id="err-email" class="text-[10px] text-red-400 hidden flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle"></i> <span data-i18n="err_email_msg">Provide a valid system email signature.</span>
+                            </span>
+                        </div>
+
+                        <!-- State & City Independent Dropdowns -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- State Selector Dropdown -->
+                            <div class="space-y-1 relative" id="state-selector-container">
+                                <label class="block text-[10px] font-semibold text-brand-text2 uppercase tracking-wider" data-i18n="label_state">State</label>
+                                <input type="hidden" id="user-state" value="" required>
+                                <div id="state-trigger" class="flex items-center justify-between w-full glass-input rounded-xl py-2.5 px-3 text-xs cursor-pointer" onclick="toggleStateDropdown()">
+                                    <span id="selected-state" class="text-brand-text2/70">Select State</span>
+                                    <i class="fas fa-chevron-down text-[8px] text-brand-text2"></i>
+                                </div>
+                                <div id="state-options" class="absolute left-0 right-0 mt-1.5 bg-[#09090A] border border-white/15 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-200 transform translate-y-1 z-50 custom-dropdown-panel text-xs">
+                                    <!-- States populated dynamically -->
+                                </div>
+                                <span id="err-state" class="text-[9px] text-red-400 hidden flex items-center gap-1">
+                                    <i class="fas fa-exclamation-circle"></i> <span>Required.</span>
+                                </span>
+                            </div>
+
+                            <!-- City Selector Dropdown (Requires State) -->
+                            <div class="space-y-1 relative" id="city-selector-container">
+                                <label class="block text-[10px] font-semibold text-brand-text2 uppercase tracking-wider" data-i18n="label_city">City</label>
+                                <input type="hidden" id="user-city" value="" required>
+                                <div id="city-trigger" class="flex items-center justify-between w-full glass-input rounded-xl py-2.5 px-3 text-xs cursor-pointer opacity-50 cursor-not-allowed" onclick="toggleCityDropdown()">
+                                    <span id="selected-city" class="text-brand-text2/70">Select City</span>
+                                    <i class="fas fa-chevron-down text-[8px] text-brand-text2"></i>
+                                </div>
+                                <div id="city-options" class="absolute left-0 right-0 mt-1.5 bg-[#09090A] border border-white/15 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all duration-200 transform translate-y-1 z-50 custom-dropdown-panel text-xs">
+                                    <!-- Cities populated dynamically based on state -->
+                                </div>
+                                <span id="err-city" class="text-[9px] text-red-400 hidden flex items-center gap-1">
+                                    <i class="fas fa-exclamation-circle"></i> <span>Required.</span>
+                                </span>
                             </div>
                         </div>
 
-                        <form id="recalibrate-form" class="space-y-3 pt-1">
-                            <textarea id="recalibrate_input" required rows="2"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-blue-500 placeholder:text-slate-400"
-                                placeholder="e.g., Physics chapter is taking double the time. Tone down the immediate long-term coding speed target."></textarea>
-                            <div class="flex justify-end">
-                                <button type="submit" id="btn-recalibrate" class="w-full sm:w-auto px-5 py-2 bg-[#0071e3] hover:bg-blue-600 text-white font-medium text-xs rounded-lg transition flex items-center justify-center space-x-1.5 shadow-sm">
-                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                                    <span>Recalibrate Operating Framework</span>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        <!-- Form Submit Button -->
+                        <button type="submit" id="submit-btn" class="w-full py-3.5 rounded-xl bg-brand-accent1 text-brand-bg1 hover:bg-brand-accent2 hover:shadow-[0_0_20px_rgba(123,201,197,0.35)] font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 group shadow-lg">
+                            <span id="btn-label" data-i18n="btn_submit">Join the Community</span>
+                            <i id="btn-icon" class="fas fa-paper-plane text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                        </button>
+                        
+                    </form>
+                </div>
+            </div>
 
+        </div>
+    </section>
+
+    <!-- KritaVa AI Consultant Interactive Chat Section -->
+    <section class="py-12 relative bg-brand-bg2 z-10 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="glass-panel p-6 border border-white/10 relative overflow-hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-full overflow-hidden border border-brand-accent1/30 flex items-center justify-center bg-black">
+                        <img src="ChatGPT Image May 15, 2026, 07_04_43 PM.png" alt="Ecosystem brain" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white">Core AI Intelligence Node</h4>
+                        <p class="text-[10px] text-brand-accent1 font-mono uppercase tracking-widest">KritaVa AI</p>
+                    </div>
+                </div>
+
+                <!-- Chat history display area -->
+                <div class="bg-black/40 rounded-xl p-4 min-h-[80px] max-h-[220px] overflow-y-auto mb-4 text-sm font-light space-y-3" id="ai-chat-output">
+                    <p class="text-brand-text2 text-xs italic">Consult our intelligence node. Ask about the WhatsApp Community, engineering logs, or ecosystem guidelines.</p>
+                </div>
+
+                <!-- Query execution layout with Enter key optimization -->
+                <div class="flex gap-2">
+                    <input type="text" id="ai-user-query" class="flex-grow glass-input rounded-xl px-4 py-2.5 text-xs" placeholder="Ask anything, e.g., What product updates do you share?" onkeydown="if(event.key === 'Enter') consultAiNode()">
+                    <button id="ai-query-btn" class="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-brand-accent1 rounded-xl border border-white/10 transition-colors text-xs font-semibold flex items-center gap-1.5" onclick="consultAiNode()">
+                        <span>Consult</span>
+                        <i class="fas fa-wand-magic-sparkles text-[10px]"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-[#e5e5ea] bg-white py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
-            &copy; 2026 Drift Operating System. Relational Database Verification Active.
+    <!-- Global Footer -->
+    <footer class="py-12 bg-brand-bg1 border-t border-white/5 z-10 relative">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-brand-text2">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded-full overflow-hidden border border-white/10 flex items-center justify-center bg-black">
+                    <img src="ChatGPT Image May 15, 2026, 07_04_43 PM.png" alt="Logo" class="w-full h-full object-cover">
+                </div>
+                <span class="font-display font-bold text-sm text-white">KritaVa <span class="text-[10px] text-brand-accent1">CORE</span></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-white/10"></span>
+                <span class="text-xs font-light" data-i18n="footer_claim">Intelligent Systems Architecture.</span>
+            </div>
+            
+            <div class="flex items-center space-x-6 text-xs text-brand-text2 font-light">
+                <a href="#benefits" class="hover:text-white transition-colors" data-i18n="nav_benefits">Benefits</a>
+                <a href="https://kritavatech.github.io/-/" target="_blank" class="hover:text-white transition-colors" data-i18n="nav_about_us">Ecosystem Profile</a>
+                <span class="text-white/10">|</span>
+                <span class="text-[11px] font-mono text-brand-text2">&copy; 2026 KritaVa.</span>
+            </div>
         </div>
     </footer>
 
-    <!-- INTERACTION LOGIC WORKSPACE -->
-    <script>
-        const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
-        let isDemoMode = false;
+    <!-- Glassmorphic Native Live Activity Log Streamer -->
+    <div id="activity-popup" class="fixed bottom-6 left-6 max-w-sm glass-panel p-4 border border-brand-accent1/20 shadow-2xl transform translate-y-36 opacity-0 transition-all duration-700 z-50 flex items-center gap-3 bg-black/90 pointer-events-none">
+        <div class="w-8 h-8 rounded-full bg-brand-accent1/10 border border-brand-accent1/20 flex items-center justify-center text-brand-accent1 text-xs">
+            <i class="fas fa-circle-nodes animate-pulse"></i>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-[9px] font-mono tracking-wider text-brand-accent1 uppercase font-bold">Live Activity</span>
+            <span id="popup-content-text" class="text-xs text-white font-medium mt-0.5">Initializing operational logs...</span>
+        </div>
+    </div>
 
-        // Fallback robust sandbox mock database structure
-        const mockDatabase = {
-            metrics: { live_growth_velocity: 60.0, live_opportunity_probability: 75.0, live_stress_level: 4.0 },
-            targets: [
-                { id: 101, target_type: "instant", description: "Clear current visual desktop clutter to restore sensory focus", is_completed: 0 },
-                { id: 102, target_type: "instant", description: "Execute immediate 10-minute structural calendar block window", is_completed: 0 },
-                { id: 103, target_type: "long_term", description: "Enforce locked 11:30 PM absolute sleep preparation protocol", is_completed: 0 }
-            ]
+    <script>
+        // Multi-Language Localization Database Map
+        const translations = {
+            en: {
+                nav_benefits: "Benefits",
+                nav_join: "Join Hub",
+                nav_about_us: "Ecosystem",
+                hero_badge: "KritaVa Intel Core Node",
+                hero_headline: "To stay ahead <br/>of the <span class='gradient-text'>digital chaos.</span>",
+                hero_subhead: "We've established an exclusive, high-signal WhatsApp community circle around KritaVa. Get pure intelligence, architectural tools, and system strategies sent straight to your feed.",
+                benefit_1_title: "Product Updates",
+                benefit_1_short: "Direct alpha previews and engineering logs.",
+                benefit_2_title: "AI Breakthroughs",
+                benefit_2_short: "State-of-the-art cognitive frameworks.",
+                benefit_3_title: "Model Releases",
+                benefit_3_short: "API tools, automations, & deployment blueprints.",
+                benefit_4_title: "Tools & Workflows",
+                benefit_4_short: "Optimized developer setups and automation paths.",
+                benefit_5_title: "Future Tech Discussion",
+                benefit_5_short: "Quantum frameworks and physical tech automations.",
+                benefit_6_title: "Startup & Building Insights",
+                benefit_6_short: "Database strategies and bootlegged operations.",
+                about_tag: "Ecosystem Architecture",
+                about_card_desc: "We design foundational logic systems, digital ecosystems, and robust infrastructures.",
+                about_card_btn: "Discover KritaVa",
+                form_title: "Request Access",
+                form_subtitle: "Submit coordinates to secure official community connection.",
+                label_name: "Full Name",
+                placeholder_name: "e.g. Liam Foster",
+                err_name_msg: "Please enter your full name.",
+                label_phone: "Phone Number",
+                placeholder_phone: "10-digit number",
+                err_phone_msg: "Provide a valid contact code sequence.",
+                label_email: "Email Address",
+                placeholder_email: "you@example.com",
+                err_email_msg: "Provide a valid system email signature.",
+                label_state: "State",
+                label_city: "City",
+                btn_submit: "Join the Community",
+                toast_title_msg: "System Node",
+                toast_success: "Coordinates validated. Redirecting to WhatsApp Node...",
+                toast_err_validate: "Security clearance failed. Validate form inputs.",
+                footer_claim: "Intelligent Systems Architecture."
+            },
+            hi: {
+                nav_benefits: "फायदे",
+                nav_join: "हब में शामिल हों",
+                nav_about_us: "पारिस्थितिकी तंत्र",
+                hero_badge: "कृतावा इंटेल कोर नोड",
+                hero_headline: "डिजिटल अराजकता <br/><span class='gradient-text'>से हमेशा आगे रहें।</span>",
+                hero_subhead: "हमने कृतावा के इर्द-गिर्द एक विशेष, हाई-सिग्नल व्हाट्सएप कम्युनिटी सर्कल स्थापित किया है। अपने फीड पर सीधे शुद्ध बुद्धिमत्ता, आर्किटेक्चरल टूल और सिस्टम रणनीतियां प्राप्त करें।",
+                benefit_1_title: "उत्पाद अपडेट",
+                benefit_1_short: "प्रत्यक्ष इंजीनियरिंग लॉग और शुरुआती पूर्वावलोकन।",
+                benefit_2_title: "एआई उपलब्धियां",
+                benefit_2_short: "अत्याधुनिक मशीन मॉडल और कॉग्निटिव पैटर्न।",
+                benefit_3_title: "नए मॉडल रिलीज",
+                benefit_3_short: "स्वचालित तर्क प्रणालियों, ओपन सोर्स स्क्रिप्ट्स और एपीआई।",
+                benefit_4_title: "टूल्स और वर्कफ़्लो",
+                benefit_4_short: "टर्मिनल ऑप्टिमाइजेशन और हाई-वेलोसिटी सेटअप।",
+                benefit_5_title: "भविष्य की तकनीक",
+                benefit_5_short: "क्वांटम फ्रेमवर्क और भौतिक तकनीकी स्वचालन।",
+                benefit_6_title: "स्टार्टअप अनुभव",
+                benefit_6_short: "बूटस्ट्रैप संचालन और डेटाबेस वितरण रणनीतियाँ।",
+                about_tag: "इकोसिस्टम वास्तुकला",
+                about_card_desc: "हम लंबी अवधि के बुनियादी तर्क प्रणालियों और डिजिटल पारिस्थितिकी तंत्रों को डिजाइन करते हैं।",
+                about_card_btn: "कृतावा की खोज करें",
+                form_title: "पहुंच का अनुरोध",
+                form_subtitle: "समुदाय कनेक्शन सुरक्षित करने के लिए विवरण प्रस्तुत करें।",
+                label_name: "पूरा नाम",
+                placeholder_name: "जैसे: राहुल शर्मा",
+                err_name_msg: "कृपया अपना पूरा नाम दर्ज करें।",
+                label_phone: "फोन नंबर",
+                placeholder_phone: "10-अंकीय नंबर",
+                err_phone_msg: "एक वैध नंबर प्रदान करें।",
+                label_email: "ईमेल पता",
+                placeholder_email: "you@example.com",
+                err_email_msg: "एक वैध ईमेल हस्ताक्षर प्रदान करें।",
+                label_state: "राज्य",
+                label_city: "शहर",
+                btn_submit: "व्हाट्सएप समुदाय में शामिल हों",
+                toast_title_msg: "सिस्टम नोड",
+                toast_success: "विवरण सत्यापित। व्हाट्सएप नोड पर रीडायरेक्ट किया जा रहा है...",
+                toast_err_validate: "सत्यापन विफल। कृपया फॉर्म विवरणों की जांच करें।",
+                footer_claim: "इंटेलिजेंट सिस्टम्स आर्किटेक्चर।"
+            }
         };
 
-        function showNotification(title, text, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            let icon = 'info', iconColor = 'text-blue-500', bg = 'bg-white', border = 'border-slate-200';
+        let currentLang = 'en';
+
+        // Apply Language Configurations dynamically
+        function setLanguage(langCode) {
+            if (!translations[langCode]) return;
+            currentLang = langCode;
             
-            if (type === 'success') { icon = 'check-circle'; iconColor = 'text-emerald-500'; }
-            else if (type === 'error') { icon = 'alert-triangle'; iconColor = 'text-rose-500'; }
-
-            toast.className = `premium-card pointer-events-auto rounded-xl p-4 border ${border} ${bg} flex items-start space-x-3 transition-all duration-300 translate-x-12 opacity-0`;
-            toast.innerHTML = `
-                <div class="${iconColor} mt-0.5"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
-                <div class="flex-grow space-y-0.5">
-                    <h5 class="text-xs font-bold uppercase tracking-wider text-slate-900">${title}</h5>
-                    <p class="text-xs text-slate-500 leading-normal">${text}</p>
-                </div>
-            `;
-            container.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 50);
-            setTimeout(() => {
-                toast.classList.add('translate-x-12', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 4500);
-        }
-
-        function updateConnectionBadge(connected) {
-            const dot = document.getElementById('status-dot');
-            const txt = document.getElementById('status-text');
-            const badge = document.getElementById('connection-status');
-            if (connected) {
-                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500';
-                txt.innerText = 'Connected Engine';
-                badge.className = 'flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs text-emerald-800';
-            } else {
-                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-amber-500';
-                txt.innerText = 'Server Offline - Demo Code Active';
-                badge.className = 'flex items-center space-x-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-xs text-amber-800';
-            }
-        }
-
-        function switchView(targetView) {
-            if (targetView === 'setup') {
-                document.getElementById('view-dashboard').classList.add('hidden');
-                document.getElementById('view-setup').classList.remove('hidden');
-            } else {
-                document.getElementById('view-setup').classList.add('hidden');
-                document.getElementById('view-dashboard').classList.remove('hidden');
-            }
-            lucide.createIcons();
-        }
-
-        function sendToRecalibrateBox(text) {
-            const inputField = document.getElementById('recalibrate_input');
-            inputField.value = `Target issue adjustment: "${text}". Please recalibrate this task criteria.`;
-            inputField.focus();
-            showNotification("Copied to Console", "Target copied below. Add comments and click Recalibrate.", "success");
-        }
-
-        function renderChecklist(targets) {
-            const instantBox = document.getElementById('container-instant-corrections');
-            const longTermBox = document.getElementById('container-longterm-targets');
-            let ic = 0, lt = 0;
+            document.getElementById('current-lang').innerText = langCode === 'en' ? 'English' : 'Hindi';
             
-            instantBox.innerHTML = '';
-            longTermBox.innerHTML = '';
-
-            targets.forEach(t => {
-                const isInstant = t.target_type === 'instant';
-                const container = isInstant ? instantBox : longTermBox;
-                const row = document.createElement('div');
-                
-                row.className = 'flex items-start justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition group';
-                row.innerHTML = `
-                    <label class="flex items-start space-x-3 flex-grow cursor-pointer select-none">
-                        <input type="checkbox" data-id="${t.id}" ${t.is_completed ? 'checked' : ''} 
-                            class="target-toggle mt-0.5 w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 transition">
-                        <span class="text-xs text-slate-700 font-light leading-relaxed ${t.is_completed ? 'line-through text-slate-400' : ''}">
-                            ${t.description}
-                        </span>
-                    </label>
-                    <button class="text-[10px] text-slate-400 hover:text-amber-600 font-medium tracking-tight ml-2 opacity-0 group-hover:opacity-100 transition-all" onclick="sendToRecalibrateBox('${t.description}')">
-                        Too Hard?
-                    </button>
-                `;
-
-                row.querySelector('input').addEventListener('change', (e) => toggleTarget(t.id, e.target.checked));
-                container.appendChild(row);
-                if (isInstant) ic++; else lt++;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const translationKey = el.getAttribute('data-i18n');
+                if (translations[langCode][translationKey]) {
+                    el.innerHTML = translations[langCode][translationKey];
+                }
             });
 
-            if (ic === 0) instantBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">No active instant guides left.</div>';
-            if (lt === 0) longTermBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">Long-term alignment optimized.</div>';
-            document.getElementById('active-targets-count').innerText = `${ic + lt} Directives Active`;
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const placeholderKey = el.getAttribute('data-i18n-placeholder');
+                if (translations[langCode][placeholderKey]) {
+                    el.setAttribute('placeholder', translations[langCode][placeholderKey]);
+                }
+            });
         }
 
-        function populateDashboard(data) {
-            const v = parseFloat(data.metrics?.live_growth_velocity || data.metrics?.live_growth_velocity === 0 ? data.metrics.live_growth_velocity : 50);
-            const o = parseFloat(data.metrics?.live_opportunity_probability || data.metrics?.live_opportunity_probability === 0 ? data.metrics.live_opportunity_probability : 50);
-            const s = parseFloat(data.metrics?.live_stress_level || 4);
+        function initLanguageSelectors() {
+            const dropdown = document.getElementById('lang-options');
+            const languages = [
+                { code: 'en', label: 'English' },
+                { code: 'hi', label: 'Hindi (हिंदी)' }
+            ];
 
-            document.getElementById('metric-consistency').innerText = v.toFixed(1) + '%';
-            document.getElementById('metric-consistency-bar').style.width = `${v}%`;
-            document.getElementById('metric-mindset').innerText = o.toFixed(1) + '%';
-            document.getElementById('metric-mindset-bar').style.width = `${o}%`;
+            dropdown.innerHTML = '';
+            languages.forEach(lang => {
+                const option = document.createElement('div');
+                option.className = "px-4 py-2 text-xs text-brand-text2 hover:text-white hover:bg-white/5 cursor-pointer transition-colors";
+                option.innerText = lang.label;
+                option.onclick = () => {
+                    setLanguage(lang.code);
+                    toggleLanguageDropdown(true);
+                };
+                dropdown.appendChild(option);
+            });
 
-            document.getElementById('metric-stress').innerText = s.toFixed(1);
-            document.getElementById('stress-ring').style.strokeDashoffset = 251.2 - (s / 10) * 251.2;
+            const langBtn = document.getElementById('lang-btn');
+            langBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const container = document.getElementById('lang-dropdown');
+                const isOpen = !container.classList.contains('opacity-0');
+                toggleLanguageDropdown(isOpen);
+            });
+
+            window.addEventListener('click', () => {
+                toggleLanguageDropdown(true);
+            });
+        }
+
+        function toggleLanguageDropdown(forceClose) {
+            const container = document.getElementById('lang-dropdown');
+            const chevron = document.getElementById('lang-chevron');
+            if (forceClose) {
+                container.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+                chevron.classList.remove('rotate-180');
+            } else {
+                container.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+                chevron.classList.add('rotate-180');
+            }
+        }
+    </script>
+
+    <script>
+        // State and Dependent City Repository Mapping
+        const stateCityData = {
+            "Jharkhand": ["Jamshedpur", "Ranchi", "Dhanbad", "Bokaro", "Deoghar"],
+            "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik"],
+            "Delhi NCR": ["New Delhi", "Noida", "Gurugram", "Ghaziabad"],
+            "California": ["San Francisco", "Los Angeles", "San Jose", "San Diego"],
+            "New York": ["New York City", "Buffalo", "Rochester", "Albany"],
+            "Texas": ["Austin", "Houston", "Dallas", "San Antonio"]
+        };
+
+        function populateSelectorOptions() {
+            const stateOptions = document.getElementById('state-options');
+            stateOptions.innerHTML = '';
+
+            Object.keys(stateCityData).forEach(state => {
+                const opt = document.createElement('div');
+                opt.className = "px-3 py-2 hover:bg-white/5 cursor-pointer transition-colors";
+                opt.innerText = state;
+                opt.onclick = () => selectState(state);
+                stateOptions.appendChild(opt);
+            });
+        }
+
+        function toggleDialDropdown() {
+            const opt = document.getElementById('dial-options');
+            const isOpen = !opt.classList.contains('opacity-0');
+            closeAllDropdowns();
+            if (!isOpen) {
+                opt.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-1');
+            }
+        }
+
+        function selectDial(val) {
+            document.getElementById('selected-flag').innerText = val;
+            closeAllDropdowns();
+        }
+
+        function toggleStateDropdown() {
+            const opt = document.getElementById('state-options');
+            const isOpen = !opt.classList.contains('opacity-0');
+            closeAllDropdowns();
+            if (!isOpen) {
+                opt.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-1');
+            }
+        }
+
+        function selectState(state) {
+            document.getElementById('user-state').value = state;
+            const triggerText = document.getElementById('selected-state');
+            triggerText.innerText = state;
+            triggerText.classList.remove('text-brand-text2/70');
+            triggerText.classList.add('text-white');
+
+            // Reset dependent city data trigger
+            const cityTrigger = document.getElementById('city-trigger');
+            cityTrigger.classList.remove('opacity-50', 'cursor-not-allowed');
+            document.getElementById('selected-city').innerText = "Select City";
+            document.getElementById('user-city').value = "";
+
+            // Populating Cities dynamically
+            const cityOptions = document.getElementById('city-options');
+            cityOptions.innerHTML = '';
             
-            const desc = document.getElementById('stress-descriptor');
-            if (s <= 3.5) { desc.innerText = 'Optimal Flow Balance'; desc.className = 'text-xs font-semibold text-emerald-600'; }
-            else if (s <= 6.5) { desc.innerText = 'Moderate Mental Load'; desc.className = 'text-xs font-semibold text-blue-600'; }
-            else { desc.innerText = 'High Strain Warning'; desc.className = 'text-xs font-semibold text-rose-600'; }
+            const cities = stateCityData[state] || [];
+            cities.forEach(city => {
+                const opt = document.createElement('div');
+                opt.className = "px-3 py-2 hover:bg-white/5 cursor-pointer transition-colors";
+                opt.innerText = city;
+                opt.onclick = () => selectCity(city);
+                cityOptions.appendChild(opt);
+            });
 
-            renderChecklist(data.targets || []);
+            closeAllDropdowns();
+            document.getElementById('err-state').classList.add('hidden');
         }
 
-        async function fetchDashboardState() {
-            try {
-                const r = await fetch(`${API_BASE_URL}/dashboard`);
-                if (r.status === 200) {
-                    const d = await r.json();
-                    isDemoMode = false;
-                    updateConnectionBadge(true);
-                    populateDashboard(d);
-                    switchView('dashboard');
-                } else {
-                    isDemoMode = false;
-                    updateConnectionBadge(true);
-                    switchView('setup');
-                }
-            } catch (e) {
-                isDemoMode = true;
-                updateConnectionBadge(false);
-                switchView(mockDatabase.profile ? 'dashboard' : 'setup');
-                if (mockDatabase.profile) populateDashboard(mockDatabase);
+        function toggleCityDropdown() {
+            const state = document.getElementById('user-state').value;
+            if (!state) return; // Prevent clicking if no state is selected
+
+            const opt = document.getElementById('city-options');
+            const isOpen = !opt.classList.contains('opacity-0');
+            closeAllDropdowns();
+            if (!isOpen) {
+                opt.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-1');
             }
         }
 
-        async function toggleTarget(id, checked) {
-            try {
-                if (isDemoMode) {
-                    const t = mockDatabase.targets.find(item => item.id === id);
-                    if (t) t.is_completed = checked ? 1 : 0;
-                    populateDashboard(mockDatabase);
-                    showNotification("State Changed", "Ecosystem metrics dynamically computed inside demo layer.", "success");
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/targets/${id}/toggle`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ is_completed: checked })
-                    });
-                    if (!r.ok) throw new Error();
-                    showNotification("Sync Successful", "Ecosystem checklist and metrics aligned dynamically.", "success");
-                    await fetchDashboardState();
+        function selectCity(city) {
+            document.getElementById('user-city').value = city;
+            const triggerText = document.getElementById('selected-city');
+            triggerText.innerText = city;
+            triggerText.classList.remove('text-brand-text2/70');
+            triggerText.classList.add('text-white');
+
+            closeAllDropdowns();
+            document.getElementById('err-city').classList.add('hidden');
+        }
+
+        function closeAllDropdowns() {
+            const items = ['dial-options', 'state-options', 'city-options', 'lang-dropdown'];
+            items.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('opacity-0', 'pointer-events-none', 'translate-y-1');
+            });
+            const chevron = document.getElementById('lang-chevron');
+            if (chevron) chevron.classList.remove('rotate-180');
+        }
+
+        // Global drop closure events listener anchor
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#dial-selector-container') && 
+                !e.target.closest('#state-selector-container') && 
+                !e.target.closest('#city-selector-container') && 
+                !e.target.closest('#lang-selector-container')) {
+                closeAllDropdowns();
+            }
+        });
+    </script>
+
+    <script>
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const particleCount = 100;
+        let mouse = { x: null, y: null, targetX: null, targetY: null, radius: 150 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.baseSize = Math.random() * 2 + 1;
+                this.size = this.baseSize;
+                this.opacity = Math.random() * 0.4 + 0.2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                // Repulsion tracking physics
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = this.x - mouse.x;
+                    let dy = this.y - mouse.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < mouse.radius) {
+                        let force = (mouse.radius - dist) / mouse.radius;
+                        this.x += (dx / dist) * force * 2;
+                        this.y += (dy / dist) * force * 2;
+                    }
                 }
-            } catch (err) {
-                showNotification("Sync Failed", "Error linking target execution coordinates.", "error");
-                await fetchDashboardState();
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(79, 163, 165, ${this.opacity})`;
+                ctx.shadowColor = 'rgba(79, 163, 165, 0.4)';
+                ctx.shadowBlur = 4;
+                ctx.fill();
+                ctx.shadowBlur = 0;
             }
         }
 
-        document.getElementById('setup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 100) {
+                        let alpha = (1 - dist / 100) * 0.12;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(123, 201, 197, ${alpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (mouse.targetX !== null) {
+                mouse.x += (mouse.targetX - mouse.x) * 0.1;
+                mouse.y += (mouse.targetY - mouse.y) * 0.1;
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+            mouse.targetX = null;
+            mouse.targetY = null;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouse.targetX = e.touches[0].clientX;
+                mouse.targetY = e.touches[0].clientY;
+            }
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+
+    <script>
+        const notificationMessages = [
+            "⚡ Architect from Bangalore just connected.",
+            "🔥 Alpha build v2.4 engineering log shared in circle.",
+            "💡 Liam F. joined the Software Architecture circle.",
+            "🚀 14 new nodes connected in Jharkhand this hour.",
+            "🤖 Cognitive reasoning framework API blueprint posted.",
+            "⭐ Developer from Mumbai joined the startup discussion."
+        ];
+
+        function triggerRandomActivityPopup() {
+            const popup = document.getElementById('activity-popup');
+            const textElement = document.getElementById('popup-content-text');
+            
+            // Choose random string
+            const randomIndex = Math.floor(Math.random() * notificationMessages.length);
+            textElement.innerText = notificationMessages[randomIndex];
+
+            // Trigger enter sequence transitions
+            popup.classList.remove('translate-y-36', 'opacity-0');
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                popup.classList.add('translate-y-36', 'opacity-0');
+            }, 5000);
+        }
+
+        // Run alert loops indefinitely with randomized timelines
+        function runNotificationScheduler() {
+            setTimeout(() => {
+                triggerRandomActivityPopup();
+                runNotificationScheduler();
+            }, Math.random() * 12000 + 10000); // 10s to 22s intervals
+        }
+    </script>
+
+    <script>
+        async function consultAiNode() {
+            const queryField = document.getElementById('ai-user-query');
+            const query = queryField.value.trim();
+            if (!query) return;
+
+            const chatOutput = document.getElementById('ai-chat-output');
+            const queryBtn = document.getElementById('ai-query-btn');
+
+            // Clean input
+            queryField.value = '';
+
+            // Render local user message instantly
+            const userParagraph = document.createElement('p');
+            userParagraph.className = 'text-white text-xs font-semibold mt-2 border-l-2 border-brand-accent1 pl-2';
+            userParagraph.innerHTML = `<span class="opacity-60">[Query]</span> ${query}`;
+            chatOutput.appendChild(userParagraph);
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+
+            // Trigger Button loading layout
+            queryBtn.disabled = true;
+            queryBtn.innerHTML = `<i class="fas fa-circle-notch animate-spin text-[10px]"></i>`;
+
+            // Prepare API Request to gemini-3-flash-preview
+            const systemPrompt = `You are the KritaVa Core Intelligence AI Assistant. Address the query briefly (2-3 sentences max) with a premium, professional tech tone. Emphasize that KritaVa is establishing a high-signal WhatsApp community for engineers, startup builders, and tech leaders where we share product updates, AI breakthroughs, new model releases, tools, workflows, tech discussions, and startup insights. If they ask how to join, guide them to the form directly above. Use English or Hindi depending on the query language.`;
+            const apiKey = ""; // Left empty so Canvas auto-injects on runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
             const payload = {
-                daily_routines: document.getElementById('daily_routines').value,
-                goals_and_ambitions: document.getElementById('goals_and_ambitions').value,
-                distractions_and_leaks: document.getElementById('distractions_and_leaks').value,
-                initial_consistency: parseInt(document.getElementById('consistency_level').value),
-                initial_resilience: parseInt(document.getElementById('resilience_level').value)
+                contents: [{ parts: [{ text: query }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
             };
 
-            const btn = document.getElementById('btn-submit-setup');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = 'Locking Coordinates...';
-
+            // Process fetching securely with error capture bounds
             try {
-                if (isDemoMode) {
-                    await new Promise(res => setTimeout(res, 800));
-                    mockDatabase.profile = payload;
-                    populateDashboard(mockDatabase);
-                    switchView('dashboard');
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/profile/setup`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!r.ok) throw new Error();
-                    await fetchDashboardState();
-                }
-                showNotification("Profile Configured", "Your parameters are verified and locked.", "success");
-            } catch (err) {
-                showNotification("Error", "Registration payload rejected. Check backend terminal.", "error");
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || "The secure AI intelligence node is temporarily calibrating. Please join the WhatsApp community directly above for immediate connectivity.";
+
+                // Render Response securely
+                const aiParagraph = document.createElement('p');
+                aiParagraph.className = 'text-brand-accent2 text-xs font-light mt-1';
+                aiParagraph.innerHTML = `<span class="opacity-60">[KritaVa AI]</span> ${text}`;
+                chatOutput.appendChild(aiParagraph);
+                
+            } catch (error) {
+                console.error(error);
+                const errParagraph = document.createElement('p');
+                errParagraph.className = 'text-red-400 text-xs italic mt-1';
+                errParagraph.innerText = "System interface bottleneck detected. Register above to get direct developer feeds.";
+                chatOutput.appendChild(errParagraph);
             } finally {
-                btn.disabled = false;
-                btn.innerHTML = orig;
+                // Restore button state
+                queryBtn.disabled = false;
+                queryBtn.innerHTML = `<span>Consult</span> <i class="fas fa-wand-magic-sparkles text-[10px]"></i>`;
+                chatOutput.scrollTop = chatOutput.scrollHeight;
             }
-        });
+        }
+    </script>
 
-        document.getElementById('recalibrate-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const text = document.getElementById('recalibrate_input').value;
-            const btn = document.getElementById('btn-recalibrate');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = 'Recalibrating Tracks...';
+    <script>
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobile-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
 
-            try {
-                if (isDemoMode) {
-                    await new Promise(res => setTimeout(res, 1000));
-                    mockDatabase.targets.push({
-                        id: Date.now(),
-                        target_type: "instant",
-                        description: `Calibrated micro-task: Focus processing loop adjustment for prompt`,
-                        is_completed: 0
-                    });
-                    populateDashboard(mockDatabase);
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/profile/recalibrate`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ input: text })
-                    });
-                    if (!r.ok) throw new Error();
-                    await fetchDashboardState();
+        document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+        document.getElementById('mobile-close-btn').addEventListener('click', toggleMobileMenu);
+
+        function handleFormSubmission(event) {
+            event.preventDefault();
+
+            const nameField = document.getElementById('user-name');
+            const phoneField = document.getElementById('user-phone');
+            const emailField = document.getElementById('user-email');
+            const stateField = document.getElementById('user-state');
+            const cityField = document.getElementById('user-city');
+
+            const errName = document.getElementById('err-name');
+            const errPhone = document.getElementById('err-phone');
+            const errEmail = document.getElementById('err-email');
+            const errState = document.getElementById('err-state');
+            const errCity = document.getElementById('err-city');
+
+            let isValid = true;
+
+            errName.classList.add('hidden');
+            errPhone.classList.add('hidden');
+            errEmail.classList.add('hidden');
+            errState.classList.add('hidden');
+            errCity.classList.add('hidden');
+
+            // Name checks
+            if (nameField.value.trim().length < 2) {
+                errName.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Phone checks
+            const cleanPhone = phoneField.value.replace(/[^0-9]/g, '');
+            if (cleanPhone.length < 8) {
+                errPhone.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Email checks
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailField.value.trim())) {
+                errEmail.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // State and City checks
+            if (!stateField.value) {
+                errState.classList.remove('hidden');
+                isValid = false;
+            }
+            if (!cityField.value) {
+                errCity.classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showNotification(translations[currentLang]['toast_err_validate'], true);
+                return;
+            }
+
+            // Enter active validation state
+            const submitBtn = document.getElementById('submit-btn');
+            const btnLabel = document.getElementById('btn-label');
+            const btnIcon = document.getElementById('btn-icon');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-wait');
+            btnLabel.innerText = currentLang === 'en' ? "Encrypting Node Data..." : "डेटा एनक्रिप्ट किया जा रहा है...";
+            btnIcon.className = "fas fa-circle-notch animate-spin";
+
+            // Premium validation flow delay before redirect
+            setTimeout(() => {
+                showNotification(translations[currentLang]['toast_success'], false);
+                
+                // Pure redirect to the community invite link
+                setTimeout(() => {
+                    window.location.href = "https://chat.whatsapp.com/invite_placeholder";
+                }, 1300);
+
+            }, 1000);
+        }
+
+        function showNotification(message, isError) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastTitle = document.getElementById('toast-title');
+
+            toastMsg.innerText = message;
+            toastTitle.innerText = translations[currentLang]['toast_title_msg'] || "System Node";
+
+            if (isError) {
+                toastIcon.className = "fas fa-times-circle text-red-400 text-xl animate-bounce";
+                toast.classList.add('border-red-500/30');
+                toast.classList.remove('border-brand-accent1/30');
+            } else {
+                toastIcon.className = "fas fa-shield-halved text-brand-accent1 text-xl animate-pulse";
+                toast.classList.remove('border-red-500/30');
+                toast.classList.add('border-brand-accent1/30');
+            }
+
+            toast.classList.remove('translate-x-[150%]');
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-[150%]');
+            }, 4000);
+        }
+
+        function checkScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 30) {
+                    element.classList.add('active');
                 }
-                document.getElementById('recalibrate_input').value = '';
-                showNotification("Ecosystem Adjusted", "AI engine re-allocated micro-steps efficiently.", "success");
-            } catch (err) {
-                showNotification("Error", "Recalibration routine pipeline rejected.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = orig;
-            }
+            });
+        }
+
+        window.addEventListener('scroll', checkScrollReveal);
+        window.addEventListener('load', () => {
+            checkScrollReveal();
+            document.querySelectorAll('section .reveal').forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < window.innerHeight) {
+                    el.classList.add('active');
+                }
+            });
         });
 
-        document.getElementById('btn-manual-sync').addEventListener('click', () => {
-            showNotification("Querying Engine", "Verifying active state rows...", "info");
-            fetchDashboardState();
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            fetchDashboardState();
-        });
+        // Initialize bootstrap actions on page startup
+        window.onload = function() {
+            resizeCanvas();
+            animate();
+            initLanguageSelectors();
+            populateSelectorOptions();
+            setLanguage('en'); 
+            
+            // Schedule random popups to indicator nodes
+            setTimeout(() => {
+                triggerRandomActivityPopup();
+                runNotificationScheduler();
+            }, 4000);
+        };
     </script>
 </body>
 </html>
