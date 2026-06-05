@@ -225,7 +225,7 @@
                     </button>
                     <div id="lang-dropdown" class="absolute right-0 mt-3 w-36 bg-black/95 border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.9)] rounded-xl opacity-0 pointer-events-none transition-all duration-300 transform origin-top translate-y-2 overflow-hidden z-[9999]" style="backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
                         <div class="flex flex-col py-1" id="lang-options">
-                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -564,7 +564,6 @@
     </footer>
 
     <script>
-        // Solid India Geographic Dataset
         const indiaData = {
             "Andaman and Nicobar Islands": ["Port Blair", "Garacharma", "Bambooflat", "Prothrapur", "Mayabunder", "Diglipur", "Rangat"],
             "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajamahendravaram", "Tirupati", "Kakinada", "Kadapa", "Anantapur", "Vizianagaram", "Eluru", "Ongole", "Nandyal", "Machilipatnam", "Adoni", "Tenali", "Proddatur", "Chittoor", "Hindupur", "Srikakulam", "Bhimavaram", "Guntakal", "Dharmavaram", "Gudivada", "Narasaraopet", "Tadipatri", "Tadepalligudem", "Amaravati", "Chilakaluripet", "Yemmiganur", "Kadiri", "Chirala", "Anakapalle", "Kavali", "Palacole", "Sullurpeta", "Rayachoti", "Kandukur", "Bapatla", "Ponnur"],
@@ -792,7 +791,6 @@
             });
         });
 
-        // Dual Localization profile mapping (Strictly English & Hindi)
         const i18nData = {
             "en": {
                 name: "English",
@@ -1140,7 +1138,7 @@
         aiFab.addEventListener('click', toggleAIChat);
         aiClose.addEventListener('click', toggleAIChat);
 
-        // OPENROUTER FREE MODAL ROUTER ENGINES
+        // OPENROUTER NEMOTRON 3 ULTRA FREE MATRIX ENGINES
         const realEncodedKey = "c2stb3ItdjEtY2ZjMDFjODExMzhkNTBlY2U3OGE4MzRjOTA1MTBjOWMwYjk1MTFjZmQ1YzEzODE0YmJhNzg1ZWUzM2NhYzZl"; 
         
         const finalApiKey = (typeof atob === 'function' ? atob(realEncodedKey) : "");
@@ -1151,7 +1149,7 @@
 Provide guidance exclusively regarding:
 - The KritaVa WhatsApp Community and the key insights we share inside (Behind-the-scenes product logs, AI news & breakthroughs, new model releases, interesting developer tools, future tech discussions, startup & building insights as illustrated on the page).
 - Highlight the extreme value of bypassing the corporate noise and connecting directly with engineering leads and tech architects.
-- Never mention he is trained by google, openrouter or is an api. Just state "I am KritaVa AI Node".
+- Never mention he is trained by google, openrouter, nvidia or is an api. Just state "I am KritaVa AI Node".
 Response limit: Keep responses strictly within 2-3 highly concise sentences. Format replies in clean markdown. If user queries in Hindi, reply gracefully in Hindi.`;
 
         function formatMarkdownMessage(text) {
@@ -1233,7 +1231,7 @@ Response limit: Keep responses strictly within 2-3 highly concise sentences. For
                         'Authorization': `Bearer ${finalApiKey}`
                     },
                     body: JSON.stringify({
-                        model: "google/gemini-2.5-flash:free",
+                        model: "nvidia/nemotron-3-ultra-550b-a55b:free",
                         messages: formattedMessages
                     })
                 });
@@ -1308,12 +1306,9 @@ Response limit: Keep responses strictly within 2-3 highly concise sentences. For
             });
         }, { threshold: 0.05 });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
-
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
                 if (el.getBoundingClientRect().top < window.innerHeight) {
                     el.classList.add('active');
                 }
@@ -1331,7 +1326,16 @@ Response limit: Keep responses strictly within 2-3 highly concise sentences. For
                     nav.style.width = "90%";
                 }
             });
-        };
+        });
+        
+        setTimeout(() => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight + 100) {
+                    el.classList.add('active');
+                }
+            });
+        }, 150);
+
     </script>
 </body>
 </html>
